@@ -14,7 +14,7 @@ Servo myservo;                            // crea el objeto myservo tipo servo
 
 const int potPin = A0;                    // pin de conexion de potenciometro
 int potValue=0;                           // variable para alamacenar el valor del potenciometro
-int angle = 0;                            // velocidad del servo
+int angle = 0;                            // ángulo de posición
 
 void setup()
 {
@@ -24,7 +24,7 @@ void setup()
 void loop()
 {
   potValue = analogRead(potPin);            // lectura del potenciometro 0-1023
-  angle = map(potValue, 0, 1023, 0, 180);   // convierte el potenciometro a valor velocidad 0-180
+  angle = map(potValue, 0, 1023, 0, 180);   // convierte el potenciometro en un ángilo de 0-180
   myservo.write(angle);                     // angulo de giro
   delay(15);                                // tiempo de espera para que el servo alcance la posicion
 }

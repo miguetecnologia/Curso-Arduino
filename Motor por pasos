@@ -1,6 +1,5 @@
 /*
- * Programa para controlar el ángulo de un servo continuo
- * en función de un potenciómetro
+ * Programa para controlar el ángulo de un servo en función de un potenciómetro
  * marzo 2018
  * migue.tecnologia
  * Original de Jose Pujol

@@ -64,14 +64,14 @@ void loop() {
   directionSwitchState=digitalRead(directionSwitchPin);
   delay(1);
   potValue=analogRead(potPin);
-  motorSpeed = map(potValue, 0, 1023, 0, 255);                 // Escalamos los valores del potenciometro entre 0 y 300rpm
+  motorSpeed = map(potValue, 0, 1023, 0, 255);                  // Escalamos los valores del potenciometro entre 0 y 255rpm
   
-  if(onOffSwitchState != onOffSwitchPreviousState){             /* Comprueba si el sensor encendido apagado a cambiado */
+  if(onOffSwitchState != onOffSwitchPreviousState){             /* Comprueba si el pulsador on/Off ha cambiado */
     if(onOffSwitchState == 1){
       motorEnabled = !motorEnabled;
     }
   }
-  if(directionSwitchState != directionSwitchPreviousState){    /* Comprueba el sentido de giro del motor */
+  if(directionSwitchState != directionSwitchPreviousState){     /* Comprueba el sentido de giro del motor */
     if(directionSwitchState == 1){
       motorDirection = !motorDirection;
     }

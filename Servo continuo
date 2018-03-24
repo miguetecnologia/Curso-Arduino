@@ -1,6 +1,5 @@
 /*
- * Programa para controlar velocidad de un servo continuo
- * en función de un potenciómetro
+ * Programa para controlar velocidad de un servo continuo en función de un potenciómetro
  * marzo 2018
  * by migue.tecnologia
  * original de Jose Pujol

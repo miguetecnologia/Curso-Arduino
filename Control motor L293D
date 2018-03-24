@@ -1,6 +1,6 @@
 /*
 Control de un motor usando L293D
-Botones on/off y cambio de giro
+Pulsadores on/off y cambio de giro
 Potenciometro para regular la velocidad
 marzo 2018
 by miguetecnologia
@@ -16,12 +16,12 @@ const int directionSwitchPin=12;
 const int potPin=A0;
 
 
-int onOffSwitchState=0;               // Variables pararecordar el valor de los interruptores
+int onOffSwitchState=0;               // Variables para recordar el valor de los pulsadores
 int onOffSwitchPreviousState=0;
 int directionSwitchState=0;
 int directionSwitchPreviousState=0;
 
-int motorEnabled=0;                   // Variables para controla el motor
+int motorEnabled=0;                   // Variables para controlar el motor
 int motorSpeed=0;
 int motorDirection=1;
 
@@ -35,22 +35,21 @@ void setup() {
   pinMode(directionSwitchPin,INPUT);
   pinMode(onOffSwitchPin,INPUT);
 
-  /*digitalWrite(EnB,LOW);              // Establecemos que empezamos con el motor apagado*/
 }
-
-
 
 void start(){
     analogWrite(EnB,motorSpeed);     // FUNCION Motor encendido a la velocidad del potenciometro
 }
 
 void stop(){
-   analogWrite(EnB,0);              // FUNCION Paramos el motor
+   analogWrite(EnB,0);              // FUNCION Paramos el motor y apagamos LED
+   digitalWrite(C1,0);
+   digitalWrite(C2,0);
 }
 
 void clockWise(){
   digitalWrite(C1,1);
-  digitalWrite(C2,0);            // FUNCION El motor gira en sentido horario
+  digitalWrite(C2,0);               // FUNCION El motor gira en sentido horario
 }
 
 

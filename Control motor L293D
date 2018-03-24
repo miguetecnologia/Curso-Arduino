@@ -1,0 +1,94 @@
+/*
+Control de un motor usando L293D
+Botones on/off y cambio de giro
+Potenciometro para regular la velocidad
+marzo 2018
+by miguetecnologia
+basado en programa JAVacasM
+*/
+
+
+const int onOffSwitchPin=3;            // Identificación de Clavijas
+const int EnB=6;
+const int C2=8;                    
+const int C1=9;
+const int directionSwitchPin=12;
+const int potPin=A0;
+
+
+int onOffSwitchState=0;               // Variables pararecordar el valor de los interruptores
+int onOffSwitchPreviousState=0;
+int directionSwitchState=0;
+int directionSwitchPreviousState=0;
+
+int motorEnabled=0;                   // Variables para controla el motor
+int motorSpeed=0;
+int motorDirection=1;
+
+int potValue=0;                       // Variables para recordar el valor del potenciometro
+
+
+void setup() {
+  pinMode(C1,OUTPUT);                 // Establecemos las clavijas de entrada y salida
+  pinMode(C2,OUTPUT);
+  pinMode(EnB,OUTPUT);
+  pinMode(directionSwitchPin,INPUT);
+  pinMode(onOffSwitchPin,INPUT);
+
+  /*digitalWrite(EnB,LOW);              // Establecemos que empezamos con el motor apagado*/
+}
+
+
+
+void start(){
+    analogWrite(EnB,motorSpeed);     // FUNCION Motor encendido a la velocidad del potenciometro
+}
+
+void stop(){
+   analogWrite(EnB,0);              // FUNCION Paramos el motor
+}
+
+void clockWise(){
+  digitalWrite(C1,1);
+  digitalWrite(C2,0);            // FUNCION El motor gira en sentido horario
+}
+
+
+void antiClockWise(){               // FUNCION El motor gira en sentido antihorario
+  digitalWrite(C1,0);
+  digitalWrite(C2,1);
+}
+
+void loop() {
+  onOffSwitchState=digitalRead(onOffSwitchPin);                // Leemos los estados de los pulsadores
+  delay(1);
+  directionSwitchState=digitalRead(directionSwitchPin);
+  delay(1);
+  potValue=analogRead(potPin);
+  motorSpeed = map(potValue, 0, 1023, 0, 255);                 // Escalamos los valores del potenciometro entre 0 y 300rpm
+  
+  if(onOffSwitchState != onOffSwitchPreviousState){             /* Comprueba si el sensor encendido apagado a cambiado */
+    if(onOffSwitchState == 1){
+      motorEnabled = !motorEnabled;
+    }
+  }
+  if(directionSwitchState != directionSwitchPreviousState){    /* Comprueba el sentido de giro del motor */
+    if(directionSwitchState == 1){
+      motorDirection = !motorDirection;
+    }
+  }
+  if(motorDirection ==1){                                       /* Llamamos a la función del giro horario o antihorario */
+    clockWise();
+  }
+  else{
+    antiClockWise(); 
+  }
+  if(motorEnabled ==1){                                          /* Llamamos a la funcion Start and Stop */
+    start(); 
+  }
+  else{
+    stop();
+  }
+    directionSwitchPreviousState=directionSwitchState;
+    onOffSwitchPreviousState=onOffSwitchState;                    // Guardamos los valores actuales para el siguiente lazo
+}

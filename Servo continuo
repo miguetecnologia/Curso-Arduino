@@ -1,0 +1,29 @@
+/*
+ * Programa para controlar velocidad de un servo continuo
+ * en función de un potenciómetro
+ * marzo 2018
+ * by migue.tecnologia
+ * original de Jose Pujol
+ * Basado en programa Knob IDE Arduino- Michal Rinott
+ */
+
+
+#include <Servo.h>                        // incluye la libreria servo
+
+Servo myservo;                            // crea el objeto myservo tipo servo
+
+const int potPin = A0;                    // pin de conexion de potenciometro
+int potValue=0;                           // variable para alamacenar el valor del potenciometro
+int vel = 0;                              // velocidad del servo
+
+void setup()
+{
+  myservo.attach(8);                       // vincula el servo al pin digital 8
+}
+
+void loop()
+{
+  potValue = analogRead(potPin);          // lectura del potenciometro 0-1023
+  vel = map(potValue, 0, 1023, 0, 110);   // convierte el potenciometro a valor velocidad 0-110 (recomendada fabricante)
+  myservo.write(vel);                     // velocidad del servo
+  delay(15);                              // tiempo de espera entre lecturas

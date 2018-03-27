@@ -1,0 +1,83 @@
+/*
+Interruptor Crepuscular:
+Sistema para controlar el encendido de un led
+en funcion de la intensidad luminosa
+LDR pin A0
+LED pin 12
+Noviembre 2017
+Jose Pujol
+febrero 2018
+migue.tecnologia
+*/
+// variables constantes para los pines
+const int ldrPin = A0; // establece el pin de la LDR
+const int RedPin = 12; // establece el pin del LED rojo
+const int GreenPin = 11; // establece el pin del LED verde
+const int BluePin = 10; // establece el pin del LED azul
+const int YellowPin = 9; // establece el pin del LED amarillo
+const int buttonPin = 3; // el numero del pin del pulsador
+// variables que pueden cambiar
+int ldrValue = 0; // variable para almacenar el valor de la LDR
+//int ldrlevel=300; // nivel de cambio del valor de la LDR
+int buttonState = 0; // variable que muestra el estado del pulsador
+int MemoryState = 0; // variable que almacena el estado del pulsador
+int RedState = LOW;
+int GreenState = LOW;
+int BlueState = LOW;
+int YellowState = LOW;
+void setup() {
+// establece el LED como una salida
+pinMode(RedPin, OUTPUT);
+pinMode(GreenPin, OUTPUT);
+pinMode(BluePin, OUTPUT);
+pinMode(YellowPin, OUTPUT);
+pinMode(buttonPin, INPUT);
+Serial.begin(9600);
+}
+void loop() {
+buttonState = digitalRead(buttonPin); // lee el estado del pulsador y lo almacena en la
+variable
+if (buttonState == 1){ // revisa si el pulsador esta presionado
+MemoryState=!MemoryState;
+} if (
+MemoryState ==1){ // Si el estado es on. Adelante!
+ldrValue = analogRead(ldrPin); // lee el valor del sensor
+Serial.print("Valor Sensor="); // Imprime un texto
+Serial.println(ldrValue); // Imprime el valor de la variable por el puerto serie
+if (ldrValue > 850) { // si el valor es superior a 900 enciende todos los leds
+RedState = HIGH; // lo establece como alto
+GreenState = HIGH;
+BlueState = HIGH;
+YellowState = HIGH;
+}
+else if (ldrValue > 650 && ldrValue <= 850) { // si el valor está entre 650 y 850
+RedState = LOW;
+GreenState = HIGH;
+BlueState = HIGH;
+YellowState = HIGH;
+}
+else if (ldrValue > 200 && ldrValue <= 650) { // si el valor está entre 200 y 650
+RedState = LOW;
+GreenState = LOW;
+BlueState = HIGH;
+YellowState = HIGH;
+}
+else{
+//if (ldrValue < 200 ) { // si el valor es menor de 200
+RedState = LOW;
+GreenState = LOW;
+BlueState = LOW;
+YellowState = HIGH;
+}
+digitalWrite(RedPin, RedState);
+digitalWrite(GreenPin, GreenState);
+digitalWrite(BluePin, BlueState);
+digitalWrite(YellowPin, YellowState);
+} else{
+digitalWrite(RedPin, LOW);
+digitalWrite(GreenPin, LOW);
+digitalWrite(BluePin, LOW);
+digitalWrite(YellowPin, LOW);
+}
+delay(200); // tiempo de espera para visibilidad
+}

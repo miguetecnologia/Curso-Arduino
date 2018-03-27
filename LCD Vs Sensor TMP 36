@@ -1,0 +1,67 @@
+/*
+ Medida de temperatura con sensor TMP36
+ Mostramos la temperatura por el monitor serie y un  LCD I2C
+ Al mismo tiempo establecemos 2 rangos de tetmperatura para
+ encender la calefacción y el AA
+ By migue.tecnologia
+ Basado  JA. Vacas
+  */
+#include <Wire.h>                                   // Incluimos las librerias necesarias
+#include <LiquidCrystal_I2C.h>
+
+const int TMP36Pin = A0;                            // Conectamos el pin central a A0
+const int ledVerdePin=6;                            // Led que representa la refrigeracion
+const int ledRojoPin=8;                             // calefaccion
+float temperatura = 0;                              // almacenamos la temperatura medida
+const float fTemperaturaRefrigeracion=28.5;         // Temperatura a la que encenderemos la refrigeracion
+const float fDeltaT=0.5;                            // Incremento para controlar la histeresis
+const float fTemperaturaCalefaccion=26.0;           // Temperatura a la que encenderemos la calefacción
+LiquidCrystal_I2C lcd(0x3F,16,2);                   // Objeto LCD_I2C
+
+void setup() {
+  Serial.begin(9600);                               // Configuramos la conexion con el PC
+  lcd.init();                                       // Inicializamos el LCD
+  lcd.backlight();                                  // Activamos la iluminacion
+  pinMode(ledVerdePin,OUTPUT);                      // Configuramos el LedVerdePin como salida
+  pinMode(ledRojoPin,OUTPUT);
+}
+
+void loop() {
+  int lectura = analogRead(TMP36Pin);                // Valor entre 0 y 1023
+  float voltaje = lectura * 5.0 / 1024.0;            // Voltaje entre 0 y 5V
+  temperatura = (voltaje - 0.5) * 100;               // Temperatura en º Celsius
+  
+
+  lcd.clear();                                       // Borramos la pantalla
+  lcd.setCursor(0,0);                                // Ponemos cursor en (0,0)
+  lcd.print("Temperatura:");                         // Mostramos los datos en la pantalla LCD
+  lcd.print(temperatura);
+  lcd.print("C");                                    
+   
+  Serial.print("Temperatura:");                       // Escribimos en el puerto serie la palabra "Temperatura"
+  Serial.print(temperatura);                          // Mostramos el valor de la temperatura
+  Serial.println("C");                                // Escribimos en el puerto serie la letra "C"
+
+  if(temperatura>fTemperaturaRefrigeracion+fDeltaT){   /* Si la temperatura supera la temperatura + histeresis*/
+   digitalWrite(ledVerdePin,HIGH);                     // Encendemos el pin verde
+   Serial.println("AA ON");                            // Escribimos en el puerto serie AA ON
+   lcd.setCursor(0,1);                                 // Ponemos cursor en (0,1)
+   lcd.print("AA ON");                                 // Mostramos AA ON
+  }
+                                                       // Si la temperatura supera la temperatura - histeresis
+  if(temperatura<fTemperaturaRefrigeracion-fDeltaT && temperatura>fTemperaturaCalefaccion+fDeltaT){
+    digitalWrite(ledVerdePin,LOW);
+    digitalWrite(ledRojoPin,LOW);
+    Serial.println("REPOSO");
+    lcd.setCursor(0,1);                                // Ponemos cursor en (0,0)
+    lcd.print("REPOSO");                               // Mostramos REPOSO
+  } 
+  
+  if(temperatura<fTemperaturaCalefaccion-fDeltaT) {
+    digitalWrite(ledRojoPin,HIGH);
+    Serial.println("HEATING ON");
+    lcd.setCursor(0,1);                                 // Ponemos cursor en (0,1)
+    lcd.print("HEATING ON");                            // Mostramos HEATING ON
+  }
+  delay(1000);                                          // Esperamos para hacer la siguiente medida
+}

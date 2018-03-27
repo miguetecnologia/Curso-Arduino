@@ -8,45 +8,49 @@ pin V del sensor conectado a 5V de Arduino
 pin central del sensor Vout a A0 de Arduino
 pin GND a GND de Arduino
 */
-// constantes que no cambian
-// se usan para establecer los pines
-const int TMP36Pin = A0; // Conectamos el pin central
-const int ledVerdePin=6; // Led que representa la refrigeracion
-const int ledRojoPin=8; // calefaccion
-// Temperatura a la que encenderemos la refrigeracion
-const float fTemperaturaRefrigeracion=29.0;
-const float fDeltaT=0.5; // Incremento para controlar la histeresis
-// Temperatura a la que encenderemos la calefacción
-const float fTemperaturaCalefaccion=23.0;
-// variables globales que cambian
-float temperatura = 0; // variable para almacenar la temperatura medida
-// Configuración
-void setup() {
-Serial.begin(9600); // Configuramos la conexion con el PC
-pinMode(ledVerdePin,OUTPUT); // Configuramos el LedVerdePin como salida
+                                                  
+                                                    // constantes que no cambian  se usan para establecer las clavijas
+const int TMP36Pin = A0;                            // Conectamos el pin central
+const int ledVerdePin=6;                            // Led que representa la refrigeracion
+const int ledRojoPin=8;                             // calefaccion
+
+
+                                                    // variables globales que cambian
+float temperatura = 0;                              // variable para almacenar la temperatura medida                                                  
+const float fTemperaturaRefrigeracion=29.0;         // Temperatura a la que encenderemos la refrigeracion
+const float fDeltaT=0.5;                            // Incremento para controlar la histeresis
+const float fTemperaturaCalefaccion=23.0;           // Temperatura a la que encenderemos la calefacción
+                                          
+
+                                                  
+void setup() {                                      // Configuración
+Serial.begin(9600);                                 // Configuramos la conexion con el PC
+pinMode(ledVerdePin,OUTPUT);                        // Configuramos el LedVerdePin como salida
 pinMode(ledRojoPin,OUTPUT);
-// No necesitamos configurar los pines analogicos
 }
-// Bucle que se repite
-void loop() {
-int lectura = analogRead(TMP36Pin); // Valor entre 0 y 1023
-float voltaje = lectura * 5.0 / 1024.0; // Voltaje entre 0 y 5V
-temperatura = (voltaje - 0.5) * 100; // Temperatura en º Celsius
-Serial.print("Temperatura:");
-Serial.print(temperatura); // Mostramos el valor de la temperatura
-Serial.println("C");
-if(temperatura>fTemperaturaRefrigeracion+fDeltaT) { // Si la temperatura supera la temperatura +
-histeresis
-digitalWrite(ledVerdePin,HIGH);
-Serial.println("Activamos la refrigeracion");
+
+
+void loop() {                                       /* Bucle que se repite*/
+int lectura = analogRead(TMP36Pin);                 // Valor entre 0 y 1023
+float voltaje = lectura * 5.0 / 1024.0;             // Voltaje entre 0 y 5V
+temperatura = (voltaje - 0.5) * 100;                // Temperatura en º Celsius
+Serial.print("Temperatura:");                       // Escribimos en el puerto serie la palabra "Temperatura"
+Serial.print(temperatura);                          // Mostramos el valor de la temperatura
+Serial.println("C");                                // Escribimos en el puerto serie la letra "C"
+
+
+if(temperatura>fTemperaturaRefrigeracion+fDeltaT){  /* Si la temperatura supera la temperatura + histeresis*/
+digitalWrite(ledVerdePin,HIGH);                     // Encendemos el pin
+Serial.println("Activamos la refrigeracion");       // Escribimos en el puerto serie "Activamos la refrigeracion"
 }
-if(temperatura<fTemperaturaRefrigeracion-fDeltaT &&
-temperatura>fTemperaturaCalefaccion+fDeltaT){// Si la temperatura supera la temperatura -
-histeresis
+
+                                                    // Si la temperatura supera la temperatura - histeresis
+if(temperatura<fTemperaturaRefrigeracion-fDeltaT && temperatura>fTemperaturaCalefaccion+fDeltaT){
 digitalWrite(ledVerdePin,LOW);
 digitalWrite(ledRojoPin,LOW);
 Serial.println("Apagamos todo");
 }
+
 if(temperatura<fTemperaturaCalefaccion-fDeltaT) {
 digitalWrite(ledRojoPin,HIGH);
 Serial.println("Activamos la Calefaccion");

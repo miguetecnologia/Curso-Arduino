@@ -1,0 +1,37 @@
+// Conexiones
+const int ledDormitorioPin=11; // LED que simula la luz del dormitorio
+const int ledSalonPin=8; // LED que simula la luz del salon
+const int ledCocinaPin=5; // LED que simula la luz de la cocina
+const int ledEntradaPin=2; // LED que simula la luz de la entrada
+// Tiempo entre pasos
+int duracionTarde=1000; // Duracion del estado Tarde
+int duracionNoche=2000; // Duracion del estado Noche
+int duracionMadrugada=500; // Duracion del estado Madrugada
+int duraciondia=3000; // Duración del estado día
+// Configuración
+void setup() {
+// configuramos los pines como salidas
+pinMode(ledDormitorioPin,OUTPUT);
+pinMode(ledSalonPin,OUTPUT);
+pinMode(ledCocinaPin,OUTPUT);
+pinMode(ledEntradaPin,OUTPUT);
+}
+// Bucle que se repite
+void loop() {
+// ESTADO TARDE
+digitalWrite(ledSalonPin,HIGH); // Encendemos el salon
+digitalWrite(ledCocinaPin,HIGH); // Encendemos el salon
+delay(duracionTarde); //Esperamos hasta el siguiente estado
+// ESTADO NOCHE
+digitalWrite(ledSalonPin,LOW); // Apagamos Salon
+digitalWrite(ledCocinaPin,LOW); // Apagamos Cocina
+digitalWrite(ledDormitorioPin,HIGH); // Encendemos Dormitorio
+delay(duracionNoche); // Esperamos hasta el siguiente estado
+// ESTADO MADRUGADA
+digitalWrite(ledDormitorioPin,LOW); // Apagamos Dormitorio
+digitalWrite(ledEntradaPin,HIGH); // Encendemos Entrada
+delay(duracionMadrugada); // Esperamos hasta el siguiente estado
+// ESTADO DÍA
+digitalWrite(ledEntradaPin,LOW); // Apagamos Entrada
+delay(duraciondia); // Reiniciamos ciclo
+}

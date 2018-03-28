@@ -23,7 +23,7 @@ void setup() {
   lcd.init();                                       // Inicializamos el LCD
   lcd.backlight();                                  // Activamos la iluminacion
   pinMode(ledVerdePin,OUTPUT);                      // Configuramos el LedVerdePin como salida
-  pinMode(ledRojoPin,OUTPUT);
+  pinMode(ledRojoPin,OUTPUT);                       // Configuramos el LedRojoPin como salida
 }
 
 void loop() {
@@ -45,9 +45,10 @@ void loop() {
   if(temperatura>fTemperaturaRefrigeracion+fDeltaT){   /* Si la temperatura supera la temperatura + histeresis*/
    digitalWrite(ledVerdePin,HIGH);                     // Encendemos el pin verde
    Serial.println("AA ON");                            // Escribimos en el puerto serie AA ON
-   lcd.setCursor(0,1);                                 // Ponemos cursor en (0,1)
-   lcd.print("AA ON");                                 // Mostramos AA ON
+   lcd.setCursor(0,1);                                 // Ponemos cursor LCD en (0,1)
+   lcd.print("AA ON");                                 // Mostramos en la segunda línea LCD "AA ON"
   }
+  
                                                        // Si la temperatura supera la temperatura - histeresis
   if(temperatura<fTemperaturaRefrigeracion-fDeltaT && temperatura>fTemperaturaCalefaccion+fDeltaT){
     digitalWrite(ledVerdePin,LOW);
